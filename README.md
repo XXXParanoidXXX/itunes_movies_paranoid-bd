@@ -1,7 +1,7 @@
 # iTunes_movies
 My library iTunes movies database
 
-Banco de Dados dos filmes da biblioteca pessoal do iTunes de Vinicius dos Santos Lima, chamado 'itunes_movies_vinicius'
+Banco de Dados dos filmes da minha biblioteca pessoal, chamado 'itunes_movies_paranoid'
 Script by Paranoid
 
 Instalação da base de dados:
