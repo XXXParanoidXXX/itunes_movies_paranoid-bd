@@ -1,5 +1,5 @@
 /*
-Banco de Dados dos filmes da biblioteca pessoal do iTunes de Vinicius dos Santos Lima, chamado 'itunes_movies_vinicius'
+Banco de Dados dos filmes da biblioteca pessoal do iTunes de Vinicius dos Santos Lima, chamado 'itunes_movies_paranoid'
 Script by Paranoid
 */
 
@@ -8,10 +8,10 @@ Script by Paranoid
 /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 
 /*Criar o banco de dados de produçao*/
-CREATE DATABASE itunes_movies_vinicius;
+CREATE DATABASE itunes_movies_paranoid;
 
 /*Conectar com o banco de dados*/
-USE itunes_movies_vinicius;
+USE itunes_movies_paranoid;
 
 /*Criar tabela sobre filmes relacionado as tabelas estudio, atores, diretor, produtor e roteirista, recebendo suas fk*/
 CREATE TABLE filmes (
@@ -141,10 +141,10 @@ ALTER TABLE filmes_has_roteirista ADD CONSTRAINT roteirista_x_filmes FOREIGN KEY
 /* Criar backup logico com auditoria*/
 
 /*Criar o banco de dados de backup e auditoria*/
-CREATE DATABASE itunes_movies_vinicius_bkp;
+CREATE DATABASE itunes_movies_paranoid_bkp;
 
 /*Conectar com o banco de dados de backup e auditoria*/
-USE itunes_movies_vinicius_bkp;
+USE itunes_movies_paranoid_bkp;
 
 /*Criar tabela de backup e auditoria da tabela de producao sobre filmes*/
 CREATE TABLE filmes_bkp (
@@ -346,7 +346,7 @@ CREATE TABLE filmes_has_roteirista_bkp (
 );
 
 /*Conectar com o banco de dados em producao*/
-USE itunes_movies_vinicius;
+USE itunes_movies_paranoid;
 
 /*Criar triggers de backup e auditoria, visando comunicacao com o banco de dados de backup logico*/
 
@@ -357,7 +357,7 @@ DELIMITER $
 CREATE TRIGGER trg_backup_filmes_insert AFTER INSERT ON filmes 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_bkp 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_bkp 
     VALUES(NULL, NEW.id_filmes_pk, NULL, NEW.nome, NULL, NEW.genero, NULL, NEW.ano, NULL, NEW.descricao, NULL, NEW.duracao, NULL, NEW.audio, NULL, NEW.legenda,
     NULL, NEW.definicao, NULL, NEW.faixa_etaria, NULL, NEW.itunes_extra, NULL, NEW.estudio_id_estudio_fk, CURRENT_USER(), NOW(), 'I');
 END$
@@ -365,7 +365,7 @@ END$
 CREATE TRIGGER trg_backup_filmes_update AFTER UPDATE ON filmes 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_bkp VALUES(NULL, OLD.id_filmes_pk, OLD.nome, NEW.nome, OLD.genero, NEW.genero, OLD.ano, NEW.ano, OLD.descricao, NEW.descricao, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_bkp VALUES(NULL, OLD.id_filmes_pk, OLD.nome, NEW.nome, OLD.genero, NEW.genero, OLD.ano, NEW.ano, OLD.descricao, NEW.descricao, 
     OLD.duracao, NEW.duracao, OLD.audio, NEW.audio, OLD.legenda, NEW.legenda, OLD.definicao, NEW.definicao, OLD.faixa_etaria, NEW.faixa_etaria, OLD.itunes_extra, NEW.itunes_extra, 
     OLD.estudio_id_estudio_fk, NEW.estudio_id_estudio_fk, CURRENT_USER(), NOW(), 'U');
 END$
@@ -373,7 +373,7 @@ END$
 CREATE TRIGGER trg_backup_filmes_delete BEFORE DELETE ON filmes 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_bkp VALUES(NULL, OLD.id_filmes_pk, OLD.nome,  NULL, OLD.genero, NULL, OLD.ano, NULL, OLD.descricao, NULL, OLD.duracao, NULL, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_bkp VALUES(NULL, OLD.id_filmes_pk, OLD.nome,  NULL, OLD.genero, NULL, OLD.ano, NULL, OLD.descricao, NULL, OLD.duracao, NULL, 
     OLD.audio, NULL, OLD.legenda, NULL, OLD.definicao, NULL, OLD.faixa_etaria, NULL, OLD.itunes_extra, NULL, OLD.estudio_id_estudio_fk, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -381,21 +381,21 @@ END$
 CREATE TRIGGER trg_backup_atores_insert AFTER INSERT ON atores 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.atores_bkp VALUES(NULL, NEW.id_atores_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
+	INSERT INTO itunes_movies_paranoid_bkp.atores_bkp VALUES(NULL, NEW.id_atores_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
     NULL, NEW.atividade, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_atores_update AFTER UPDATE ON atores 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.atores_bkp VALUES(NULL, OLD.id_atores_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte, 
+	INSERT INTO itunes_movies_paranoid_bkp.atores_bkp VALUES(NULL, OLD.id_atores_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte, 
     OLD.nacionalidade, NEW.nacionalidade, OLD.atividade, NEW.atividade, CURRENT_USER(), NOW(), 'U');
 END$
 
 CREATE TRIGGER trg_backup_atores_delete BEFORE DELETE ON atores 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.atores_bkp VALUES(NULL, OLD.id_atores_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL, 
+	INSERT INTO itunes_movies_paranoid_bkp.atores_bkp VALUES(NULL, OLD.id_atores_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL, 
     OLD.nacionalidade, NULL, OLD.atividade, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -403,21 +403,21 @@ END$
 CREATE TRIGGER trg_backup_diretor_insert AFTER INSERT ON diretor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.diretor_bkp VALUES(NULL, NEW.id_diretor_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
+	INSERT INTO itunes_movies_paranoid_bkp.diretor_bkp VALUES(NULL, NEW.id_diretor_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
     NULL, NEW.atividade, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_diretor_update AFTER UPDATE ON diretor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.diretor_bkp VALUES(NULL, OLD.id_diretor_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
+	INSERT INTO itunes_movies_paranoid_bkp.diretor_bkp VALUES(NULL, OLD.id_diretor_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
     OLD.nacionalidade, NEW.nacionalidade, OLD.atividade, NEW.atividade, CURRENT_USER(), NOW(), 'U');
 END$
 
 CREATE TRIGGER trg_backup_diretor_delete BEFORE DELETE ON diretor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.diretor_bkp VALUES(NULL, OLD.id_diretor_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.diretor_bkp VALUES(NULL, OLD.id_diretor_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
     OLD.nacionalidade, NULL, OLD.atividade, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -425,21 +425,21 @@ END$
 CREATE TRIGGER trg_backup_produtor_insert AFTER INSERT ON produtor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.produtor_bkp VALUES(NULL, NEW.id_produtor_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
+	INSERT INTO itunes_movies_paranoid_bkp.produtor_bkp VALUES(NULL, NEW.id_produtor_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
     NULL, NEW.atividade, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_produtor_update AFTER UPDATE ON produtor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.produtor_bkp VALUES(NULL, OLD.id_produtor_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
+	INSERT INTO itunes_movies_paranoid_bkp.produtor_bkp VALUES(NULL, OLD.id_produtor_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
     OLD.nacionalidade, NEW.nacionalidade, OLD.atividade, NEW.atividade, CURRENT_USER(), NOW(), 'U');
 END$
 
 CREATE TRIGGER trg_backup_produtor_delete BEFORE DELETE ON produtor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.produtor_bkp VALUES(NULL, OLD.id_produtor_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.produtor_bkp VALUES(NULL, OLD.id_produtor_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
     OLD.nacionalidade, NULL, OLD.atividade, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -447,21 +447,21 @@ END$
 CREATE TRIGGER trg_backup_roteirista_insert AFTER INSERT ON roteirista 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.roteirista_bkp VALUES(NULL, NEW.id_roteirista_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
+	INSERT INTO itunes_movies_paranoid_bkp.roteirista_bkp VALUES(NULL, NEW.id_roteirista_pk, NULL, NEW.nome, NULL, NEW.sexo, NULL, NEW.nascimento, NULL, NEW.morte, NULL, NEW.nacionalidade, 
     NULL, NEW.atividade, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_roteirista_update AFTER UPDATE ON roteirista 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.roteirista_bkp VALUES(NULL, OLD.id_roteirista_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
+	INSERT INTO itunes_movies_paranoid_bkp.roteirista_bkp VALUES(NULL, OLD.id_roteirista_pk, OLD.nome, NEW.nome, OLD.sexo, NEW.sexo, OLD.nascimento, NEW.nascimento, OLD.morte, NEW.morte,
     OLD.nacionalidade, NEW.nacionalidade, OLD.atividade, NEW.atividade, CURRENT_USER(), NOW(), 'U');
 END$
 
 CREATE TRIGGER trg_backup_roteirista_delete BEFORE DELETE ON roteirista 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.roteirista_bkp VALUES(NULL, OLD.id_roteirista_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.roteirista_bkp VALUES(NULL, OLD.id_roteirista_pk, OLD.nome, NULL, OLD.sexo, NULL, OLD.nascimento, NULL, OLD.morte, NULL,
     OLD.nacionalidade, NULL, OLD.atividade, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -469,14 +469,14 @@ END$
 CREATE TRIGGER trg_backup_estudio_insert AFTER INSERT ON estudio 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_bkp VALUES(NULL, NEW.id_estudio_pk, NULL, NEW.nome, NULL, NEW.fundacao, NULL, NEW.encerramento, NULL, NEW.faturamento, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_bkp VALUES(NULL, NEW.id_estudio_pk, NULL, NEW.nome, NULL, NEW.fundacao, NULL, NEW.encerramento, NULL, NEW.faturamento, 
     NULL, NEW.website, NULL, NEW.estudio_localizacao_id_estudio_localizacao_fk, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_estudio_update AFTER UPDATE ON estudio 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_bkp VALUES(NULL, OLD.id_estudio_pk, OLD.nome, NEW.nome, OLD.fundacao, NEW.fundacao, OLD.encerramento, NEW.encerramento, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_bkp VALUES(NULL, OLD.id_estudio_pk, OLD.nome, NEW.nome, OLD.fundacao, NEW.fundacao, OLD.encerramento, NEW.encerramento, 
     OLD.faturamento, NEW.faturamento, OLD.website, NEW.website, OLD.estudio_localizacao_id_estudio_localizacao_fk, NEW.estudio_localizacao_id_estudio_localizacao_fk, CURRENT_USER(), NOW(), 
     'U');
 END$
@@ -484,7 +484,7 @@ END$
 CREATE TRIGGER trg_backup_estudio_delete BEFORE DELETE ON estudio 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_bkp VALUES(NULL, OLD.id_estudio_pk, OLD.nome, NULL, OLD.fundacao, NULL, OLD.encerramento, NULL, OLD.faturamento, NULL, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_bkp VALUES(NULL, OLD.id_estudio_pk, OLD.nome, NULL, OLD.fundacao, NULL, OLD.encerramento, NULL, OLD.faturamento, NULL, 
     OLD.website, NULL, OLD.estudio_localizacao_id_estudio_localizacao_fk, NULL, CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -492,21 +492,21 @@ END$
 CREATE TRIGGER trg_backup_estudio_localizacao_insert AFTER INSERT ON estudio_localizacao 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_localizacao_bkp VALUES(NULL, NEW.id_estudio_localizacao_pk, NULL, NEW.cidade, NULL, NEW.estado, NULL, NEW.pais, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_localizacao_bkp VALUES(NULL, NEW.id_estudio_localizacao_pk, NULL, NEW.cidade, NULL, NEW.estado, NULL, NEW.pais, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_estudio_localizacao_update AFTER UPDATE ON estudio_localizacao 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_localizacao_bkp VALUES(NULL, OLD.id_estudio_localizacao_pk, OLD.cidade, NEW.cidade, OLD.estado, NEW.estado, OLD.pais, NEW.pais, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_localizacao_bkp VALUES(NULL, OLD.id_estudio_localizacao_pk, OLD.cidade, NEW.cidade, OLD.estado, NEW.estado, OLD.pais, NEW.pais, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_estudio_localizacao_delete BEFORE DELETE ON estudio_localizacao 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.estudio_localizacao_bkp VALUES(NULL, OLD.id_estudio_localizacao_pk, OLD.cidade, NULL, OLD.estado, NULL, OLD.pais, NULL, 
+	INSERT INTO itunes_movies_paranoid_bkp.estudio_localizacao_bkp VALUES(NULL, OLD.id_estudio_localizacao_pk, OLD.cidade, NULL, OLD.estado, NULL, OLD.pais, NULL, 
     CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -514,21 +514,21 @@ END$
 CREATE TRIGGER trg_backup_filmes_has_atores_insert AFTER INSERT ON filmes_has_atores 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_atores_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.atores_id_atores_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_atores_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.atores_id_atores_pk, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_atores_update AFTER UPDATE ON filmes_has_atores 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_atores_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_atores_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
     OLD.atores_id_atores_pk, NEW.atores_id_atores_pk, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_atores_delete BEFORE DELETE ON filmes_has_atores
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_atores_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.atores_id_atores_pk, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_atores_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.atores_id_atores_pk, NULL,
     CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -537,21 +537,21 @@ END$
 CREATE TRIGGER trg_backup_filmes_has_diretor_insert AFTER INSERT ON filmes_has_diretor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_diretor_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.diretor_id_diretor_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_diretor_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.diretor_id_diretor_pk, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_diretor_update AFTER UPDATE ON filmes_has_diretor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_diretor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_diretor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
     OLD.diretor_id_diretor_pk, NEW.diretor_id_diretor_pk, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_diretor_delete BEFORE DELETE ON filmes_has_diretor
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_diretor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.diretor_id_diretor_pk, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_diretor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.diretor_id_diretor_pk, NULL,
     CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -559,21 +559,21 @@ END$
 CREATE TRIGGER trg_backup_filmes_has_produtor_insert AFTER INSERT ON filmes_has_produtor
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_produtor_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.produtor_id_produtor_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_produtor_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.produtor_id_produtor_pk, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_produtor_update AFTER UPDATE ON filmes_has_produtor 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_produtor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_produtor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
     OLD.produtor_id_produtor_pk, NEW.produtor_id_produtor_pk, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_produtor_delete BEFORE DELETE ON filmes_has_produtor
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_produtor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.produtor_id_produtor_pk, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_produtor_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.produtor_id_produtor_pk, NULL,
     CURRENT_USER(), NOW(), 'D');
 END$
 
@@ -581,28 +581,28 @@ END$
 CREATE TRIGGER trg_backup_filmes_has_roteirista_insert AFTER INSERT ON filmes_has_roteirista
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_roteirista_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.roteirista_id_roteirista_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_roteirista_bkp VALUES(NULL, NULL, NEW.filmes_id_filmes_pk, NULL, NEW.roteirista_id_roteirista_pk, 
     CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_roteirista_update AFTER UPDATE ON filmes_has_roteirista 
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_roteirista_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_roteirista_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NEW.filmes_id_filmes_pk, 
     OLD.roteirista_id_roteirista_pk, NEW.roteirista_id_roteirista_pk, CURRENT_USER(), NOW(), 'I');
 END$
 
 CREATE TRIGGER trg_backup_filmes_has_roteirista_delete BEFORE DELETE ON filmes_has_roteirista
 FOR EACH ROW
 BEGIN
-	INSERT INTO itunes_movies_vinicius_bkp.filmes_has_roteirista_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.roteirista_id_roteirista_pk, NULL,
+	INSERT INTO itunes_movies_paranoid_bkp.filmes_has_roteirista_bkp VALUES(NULL, OLD.filmes_id_filmes_pk, NULL, OLD.roteirista_id_roteirista_pk, NULL,
     CURRENT_USER(), NOW(), 'D');
 END$
 
 /*ALTERAR O DELIMITADOR PARA SCRIPT*/
 DELIMITER ;
 
-USE itunes_movies_vinicius;
+USE itunes_movies_paranoid;
 
 /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 /*Script de populacao do banco de dados*/
